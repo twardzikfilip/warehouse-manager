@@ -1,9 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, isDevMode, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonFooter, IonHeader,
-  IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonProgressBar, IonText, IonTitle, IonToolbar,
+  IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonDatetime, IonFooter, IonHeader,
+  IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonNote, IonProgressBar, IonText, IonTitle, IonToolbar,
   ToastController,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -11,8 +12,10 @@ import { addIcons } from 'ionicons';
 import { addOutline, cameraOutline, closeCircleOutline, documentTextOutline, warningOutline } from 'ionicons/icons';
 import { CameraService } from '../../services/camera.service';
 import { ImagePreprocessService, OCR_VARIANTS } from '../../services/image-preprocess.service';
+import { LanguageService } from '../../services/language.service';
 import { OcrService } from '../../services/ocr.service';
 import { mergeReceipts, ParsedLine, ParsedReceipt, parseReceipt } from '../../services/receipt-parser';
+import { LanguageSwitchComponent } from '../../components/language-switch/language-switch.component';
 import { ProductStore } from '../../store/products.store';
 
 type ScanStep = 'idle' | 'preparing' | 'recognizing' | 'review';
@@ -25,9 +28,10 @@ const SAMPLE_DOCUMENT = 'assets/warehouse_listing.jpeg';
   templateUrl: 'scan.page.html',
   styleUrls: ['scan.page.scss'],
   imports: [
-    FormsModule, TranslatePipe,
+    DatePipe, FormsModule, TranslatePipe, LanguageSwitchComponent,
     IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonButtons, IonButton, IonIcon, IonCard, IonCardContent,
     IonProgressBar, IonList, IonListHeader, IonItem, IonLabel, IonInput, IonNote, IonText, IonAccordionGroup, IonAccordion,
+    IonModal, IonDatetime,
   ],
 })
 export class ScanPage {
@@ -38,6 +42,7 @@ export class ScanPage {
   private readonly translate = inject(TranslateService);
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
+  readonly language = inject(LanguageService);
 
   readonly devMode = isDevMode();
   readonly step = signal<ScanStep>('idle');
@@ -87,6 +92,12 @@ export class ScanPage {
 
   updateHeader(changes: Partial<ReceiptHeader>): void {
     this.header.update((header) => ({ ...header, ...changes }));
+  }
+
+  setDate(value: string | string[] | null | undefined): void {
+    if (typeof value === 'string') {
+      this.updateHeader({ date: value.slice(0, 10) });
+    }
   }
 
   /** Editing a line counts as checking it. */

@@ -2,10 +2,7 @@
   <ion-toolbar>
     <ion-title>{{ 'dashboard.title' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="chooseLanguage()" [attr.aria-label]="'dashboard.language' | translate">
-        <ion-icon slot="start" name="language-outline"></ion-icon>
-        {{ language.current().toUpperCase() }}
-      </ion-button>
+      <app-language-switch></app-language-switch>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

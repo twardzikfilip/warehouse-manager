@@ -8,6 +8,7 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { add, addCircleOutline, arrowDown, arrowUp, createOutline, removeCircleOutline, trashOutline } from 'ionicons/icons';
+import { LanguageSwitchComponent } from '../../components/language-switch/language-switch.component';
 import { ProductFormModalComponent } from '../../components/product-form-modal/product-form-modal.component';
 import { Product, ProductInput } from '../../models/product';
 import { LanguageService } from '../../services/language.service';
@@ -18,7 +19,7 @@ import { LOW_STOCK_THRESHOLD, ProductSortField, ProductStore } from '../../store
   templateUrl: 'list.page.html',
   styleUrls: ['list.page.scss'],
   imports: [
-    DatePipe, TranslatePipe,
+    DatePipe, TranslatePipe, LanguageSwitchComponent,
     IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonSelect, IonSelectOption, IonButtons, IonButton, IonIcon,
     IonList, IonItemSliding, IonItem, IonLabel, IonBadge, IonItemOptions, IonItemOption, IonFab, IonFabButton,
   ],

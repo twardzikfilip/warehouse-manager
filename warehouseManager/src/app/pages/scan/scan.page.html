@@ -1,11 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>{{ (step() === 'review' ? 'scan.review.title' : 'scan.title') | translate }}</ion-title>
-    @if (step() === 'review') {
-      <ion-buttons slot="end">
+    <ion-buttons slot="end">
+      @if (step() === 'review') {
         <ion-button (click)="reset()">{{ 'scan.review.discard' | translate }}</ion-button>
-      </ion-buttons>
-    }
+      }
+      <app-language-switch></app-language-switch>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -51,10 +52,23 @@
           <ion-input labelPlacement="stacked" [label]="'scan.review.number' | translate"
             [ngModel]="header().number" (ngModelChange)="updateHeader({ number: $event })"></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-input labelPlacement="stacked" type="date" [label]="'scan.review.date' | translate"
-            [ngModel]="header().date" (ngModelChange)="updateHeader({ date: $event })"></ion-input>
+        <!-- Ionic picker instead of a native date input, which would follow the browser's locale instead of the app's. -->
+        <ion-item button detail="false" id="receipt-date-trigger">
+          <ion-label>
+            <p>{{ 'scan.review.date' | translate }}</p>
+            <h3 class="receipt-date">
+              {{ header().date ? (header().date | date: 'longDate' : undefined : language.current()) : ('scan.review.noDate' | translate) }}
+            </h3>
+          </ion-label>
         </ion-item>
+        <ion-modal #dateModal trigger="receipt-date-trigger" [initialBreakpoint]="1" [breakpoints]="[0, 1]" class="date-modal">
+          <ng-template>
+            <ion-datetime presentation="date" [locale]="language.current() === 'pl' ? 'pl-PL' : 'en-US'" [firstDayOfWeek]="1"
+              [value]="header().date || null" [showDefaultButtons]="true"
+              [doneText]="'common.done' | translate" [cancelText]="'common.cancel' | translate"
+              (ionChange)="setDate($event.detail.value); dateModal.dismiss()"></ion-datetime>
+          </ng-template>
+        </ion-modal>
         <ion-item>
           <ion-input labelPlacement="stacked" [label]="'scan.review.supplier' | translate"
             [ngModel]="header().supplier" (ngModelChange)="updateHeader({ supplier: $event })"></ion-input>

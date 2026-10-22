@@ -9,7 +9,8 @@
     "save": "Zapisz",
     "delete": "Usuń",
     "edit": "Edytuj",
-    "close": "Zamknij"
+    "language": "Język",
+    "done": "Gotowe"
   },
   "scan": {
     "title": "Zeskanuj dokument",
@@ -31,6 +32,7 @@
       "document": "Dokument",
       "number": "Numer dokumentu",
       "date": "Data",
+      "noDate": "Nie rozpoznano – dotknij, aby ustawić",
       "supplier": "Dostawca",
       "invoice": "Numer faktury",
       "lines": "Pozycje ({{count}})",
@@ -100,8 +102,7 @@
     "recentReceiptsEmpty": "Nie przyjęto jeszcze żadnych dokumentów.",
     "receiptLines": "Pozycje: {{count}}",
     "recentlyUpdated": "Ostatnio zmienione",
-    "recentlyUpdatedEmpty": "Brak produktów.",
-    "language": "Język"
+    "recentlyUpdatedEmpty": "Brak produktów."
   },
   "language": {
     "pl": "Polski",

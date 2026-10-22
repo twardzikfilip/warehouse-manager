@@ -9,7 +9,8 @@
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
-    "close": "Close"
+    "language": "Language",
+    "done": "Done"
   },
   "scan": {
     "title": "Scan document",
@@ -31,6 +32,7 @@
       "document": "Document",
       "number": "Document number",
       "date": "Date",
+      "noDate": "Not recognized – tap to set",
       "supplier": "Supplier",
       "invoice": "Invoice number",
       "lines": "Items ({{count}})",
@@ -100,8 +102,7 @@
     "recentReceiptsEmpty": "No documents imported yet.",
     "receiptLines": "{{count}} item(s)",
     "recentlyUpdated": "Recently changed",
-    "recentlyUpdatedEmpty": "No products yet.",
-    "language": "Language"
+    "recentlyUpdatedEmpty": "No products yet."
   },
   "language": {
     "pl": "Polski",
