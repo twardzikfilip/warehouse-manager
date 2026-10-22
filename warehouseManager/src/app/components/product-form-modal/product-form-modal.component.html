@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">{{ 'common.cancel' | translate }}</ion-button>
+    </ion-buttons>
+    <ion-title>{{ (product ? 'productForm.titleEdit' : 'productForm.titleAdd') | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button strong (click)="save()">{{ 'common.save' | translate }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-input labelPlacement="stacked" [label]="'productForm.code' | translate" autocapitalize="characters"
+        [ngModel]="form().code" (ngModelChange)="update({ code: $event })"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="stacked" [label]="'productForm.name' | translate"
+        [ngModel]="form().name" (ngModelChange)="update({ name: $event })"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="stacked" [label]="'productForm.unit' | translate"
+        [ngModel]="form().unit" (ngModelChange)="update({ unit: $event })"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="stacked" type="number" inputmode="numeric" min="0" [label]="'productForm.quantity' | translate"
+        [ngModel]="form().quantity" (ngModelChange)="update({ quantity: $event })"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  @if (error(); as error) {
+    <ion-text color="danger"><p role="alert">{{ error | translate }}</p></ion-text>
+  }
+</ion-content>

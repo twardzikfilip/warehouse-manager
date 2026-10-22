@@ -1,19 +1,128 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Zeskanuj dokument
-    </ion-title>
+    <ion-title>{{ (step() === 'review' ? 'scan.review.title' : 'scan.title') | translate }}</ion-title>
+    @if (step() === 'review') {
+      <ion-buttons slot="end">
+        <ion-button (click)="reset()">{{ 'scan.review.discard' | translate }}</ion-button>
+      </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  @switch (step()) {
+    @case ('idle') {
+      <div class="intro ion-padding">
+        <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
+        <p>{{ 'scan.intro' | translate }}</p>
+        <ion-button expand="block" (click)="takePhoto()">
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          {{ 'scan.takePhoto' | translate }}
+        </ion-button>
+        @if (devMode) {
+          <ion-button expand="block" fill="outline" (click)="useSample()">{{ 'scan.useSample' | translate }}</ion-button>
+        }
+      </div>
+    }
 
+    @case ('review') {
+      @if (isDuplicate() || checksumMismatch() || linesToCheck() > 0 || lines().length === 0) {
+        <ion-card color="warning" class="warnings">
+          <ion-card-content>
+            @if (isDuplicate()) {
+              <p><ion-icon name="warning-outline"></ion-icon> {{ 'scan.warning.duplicate' | translate: { number: header().number } }}</p>
+            }
+            @if (checksumMismatch()) {
+              <p>{{ 'scan.warning.checksum' | translate: { lines: totalQuantity(), footer: footerQuantity() } }}</p>
+            }
+            @if (linesToCheck() > 0) {
+              <p>{{ 'scan.warning.linesToCheck' | translate: { count: linesToCheck() } }}</p>
+            }
+            @if (lines().length === 0) {
+              <p>{{ 'scan.warning.noLines' | translate }}</p>
+            }
+          </ion-card-content>
+        </ion-card>
+      }
 
-  <ion-button expand="full" (click)="onButtonClick()">Click Me</ion-button>
-  <app-explore-container name="Zeskanuj fakturę"></app-explore-container>
+      <ion-list>
+        <ion-list-header>{{ 'scan.review.document' | translate }}</ion-list-header>
+        <ion-item>
+          <ion-input labelPlacement="stacked" [label]="'scan.review.number' | translate"
+            [ngModel]="header().number" (ngModelChange)="updateHeader({ number: $event })"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input labelPlacement="stacked" type="date" [label]="'scan.review.date' | translate"
+            [ngModel]="header().date" (ngModelChange)="updateHeader({ date: $event })"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input labelPlacement="stacked" [label]="'scan.review.supplier' | translate"
+            [ngModel]="header().supplier" (ngModelChange)="updateHeader({ supplier: $event })"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input labelPlacement="stacked" [label]="'scan.review.invoice' | translate"
+            [ngModel]="header().invoiceNumber" (ngModelChange)="updateHeader({ invoiceNumber: $event })"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-list class="lines">
+        <ion-list-header>{{ 'scan.review.lines' | translate: { count: lines().length } }}</ion-list-header>
+        @for (line of lines(); track $index; let i = $index) {
+          <div class="line" [class.check]="line.confidence === 'check'">
+            <div class="line-row">
+              <ion-input class="code" fill="outline" labelPlacement="stacked" [label]="'scan.review.code' | translate"
+                [ngModel]="line.code" (ngModelChange)="updateLine(i, { code: $event })"></ion-input>
+              <ion-input class="qty" fill="outline" labelPlacement="stacked" type="number" inputmode="numeric" min="1"
+                [label]="('scan.review.quantity' | translate) + ' (' + line.unit + ')'"
+                [ngModel]="line.quantity" (ngModelChange)="updateLine(i, { quantity: $event })"></ion-input>
+              <ion-button fill="clear" color="medium" (click)="removeLine(i)" [attr.aria-label]="'scan.review.removeLine' | translate">
+                <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+            <ion-input fill="outline" labelPlacement="stacked" [label]="'scan.review.name' | translate"
+              [ngModel]="line.name" (ngModelChange)="updateLine(i, { name: $event })"></ion-input>
+            @let existing = existingQuantity(line.code);
+            <ion-note>
+              {{ existing === undefined ? ('scan.review.new' | translate) : ('scan.review.existing' | translate: { quantity: existing }) }}
+            </ion-note>
+          </div>
+        }
+        <ion-button fill="clear" (click)="addLine()">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          {{ 'scan.review.addLine' | translate }}
+        </ion-button>
+      </ion-list>
+
+      <ion-accordion-group>
+        <ion-accordion value="raw">
+          <ion-item slot="header"><ion-label>{{ 'scan.review.rawText' | translate }}</ion-label></ion-item>
+          <pre slot="content" class="raw-text ion-padding">{{ rawText() }}</pre>
+        </ion-accordion>
+      </ion-accordion-group>
+    }
+
+    @default {
+      <div class="progress ion-padding">
+        @if (step() === 'preparing') {
+          <p>{{ 'scan.step.preparing' | translate }}</p>
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+        } @else {
+          <p>{{ 'scan.step.recognizing' | translate: { percent: progressPercent() } }}</p>
+          <ion-progress-bar [value]="progress()"></ion-progress-bar>
+        }
+        <ion-text color="medium"><small>{{ 'scan.step.firstRunHint' | translate }}</small></ion-text>
+      </div>
+    }
+  }
 </ion-content>
+
+@if (step() === 'review') {
+  <ion-footer>
+    <ion-toolbar>
+      @if (!isValid() && lines().length > 0) {
+        <ion-text color="danger"><small class="invalid">{{ 'scan.warning.invalid' | translate }}</small></ion-text>
+      }
+      <ion-button expand="block" [disabled]="!isValid()" (click)="accept()">{{ 'scan.review.accept' | translate }}</ion-button>
+    </ion-toolbar>
+  </ion-footer>
+}

@@ -37,7 +37,8 @@
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": [],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "allowedCommonJsDependencies": ["tesseract.js"]
           },
           "configurations": {
             "production": {
@@ -129,7 +130,10 @@
     }
   },
   "cli": {
-    "schematicCollections": ["@ionic/angular-toolkit"]
+    "schematicCollections": [
+      "@ionic/angular-toolkit"
+    ],
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

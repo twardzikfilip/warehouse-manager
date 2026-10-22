@@ -1,19 +1,76 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>{{ 'list.title' | translate }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [placeholder]="'list.search' | translate" [debounce]="150"
+      [value]="productsStore.filter().query" (ionInput)="onSearch($event.detail.value)"></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-select class="sort-select" interface="popover" [label]="'list.sortBy' | translate"
+      [value]="productsStore.filter().sortBy" (ionChange)="onSortChange($event.detail.value)">
+      @for (field of sortFields; track field) {
+        <ion-select-option [value]="field">{{ 'list.sort.' + field | translate }}</ion-select-option>
+      }
+    </ion-select>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleOrder()" [attr.aria-label]="'list.toggleOrder' | translate">
+        <ion-icon slot="icon-only" [name]="productsStore.filter().order === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  @if (productsStore.products().length === 0) {
+    @if (productsStore.loaded()) {
+      <div class="empty-state ion-padding">
+        <h2>{{ 'list.empty' | translate }}</h2>
+        <p>{{ 'list.emptyHint' | translate }}</p>
+      </div>
+    }
+  } @else if (productsStore.filteredProducts().length === 0) {
+    <div class="empty-state ion-padding">
+      <p>{{ 'list.noResults' | translate }}</p>
+    </div>
+  } @else {
+    <ion-list>
+      @for (product of productsStore.filteredProducts(); track product.id) {
+        <ion-item-sliding #sliding>
+          <ion-item>
+            <ion-label>
+              <h2>{{ product.name }}</h2>
+              <p>{{ product.code }} · {{ product.updatedAt | date: 'short' : undefined : language.current() }}</p>
+            </ion-label>
+            <div slot="end" class="quantity">
+              <ion-button fill="clear" size="small" [disabled]="product.quantity === 0"
+                (click)="adjust(product, -1)" [attr.aria-label]="'list.decrease' | translate">
+                <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-badge [color]="product.quantity <= lowStockThreshold ? 'warning' : 'medium'">
+                {{ product.quantity }} {{ product.unit }}
+              </ion-badge>
+              <ion-button fill="clear" size="small" (click)="adjust(product, 1)" [attr.aria-label]="'list.increase' | translate">
+                <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option (click)="openForm(product, sliding)">
+              <ion-icon slot="icon-only" name="create-outline" [attr.aria-label]="'common.edit' | translate"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="confirmDelete(product, sliding)">
+              <ion-icon slot="icon-only" name="trash-outline" [attr.aria-label]="'common.delete' | translate"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      }
+    </ion-list>
+  }
 
-  <app-explore-container name="List Products">
-    xxxxxxxxxx
-  </app-explore-container>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openForm()" [attr.aria-label]="'list.add' | translate">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

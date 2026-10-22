@@ -1,33 +1,39 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
-import { Product } from '../store/products.store';
+import { inject, Injectable } from '@angular/core';
+import { Product } from '../models/product';
+import { ReceiptDocument } from '../models/receipt';
+import { StorageService } from './storage.service';
 
+const SCHEMA_VERSION = 1;
+const KEYS = {
+    version: 'schemaVersion',
+    products: 'products',
+    receipts: 'receipts',
+};
+
+/** Persists products and imported receipts. */
 @Injectable({
     providedIn: 'root',
 })
 export class ProductService {
-    constructor() {}
+    private readonly storage = inject(StorageService);
 
-    getProducts(): Observable<Product[]> {
-        const mockProducts: Product[] = Array.from({ length: 10 }, () => ({
-            id: uuidv4(),
-            code: this.generateRandomCode(),
-            name: this.generateRandomName(),
-            quantity: 1
-        }));
-
-        return of(mockProducts);
+    async load(): Promise<{ products: Product[]; receipts: ReceiptDocument[] }> {
+        // Migrations from older schema versions go here.
+        if ((await this.storage.get<number>(KEYS.version)) === null) {
+            await this.storage.set(KEYS.version, SCHEMA_VERSION);
+        }
+        const [products, receipts] = await Promise.all([
+            this.storage.get<Product[]>(KEYS.products),
+            this.storage.get<ReceiptDocument[]>(KEYS.receipts),
+        ]);
+        return { products: products ?? [], receipts: receipts ?? [] };
     }
 
-    private generateRandomCode(): string {
-        return Math.random().toString(36).substring(2, 8).toUpperCase();
+    saveProducts(products: Product[]): Promise<void> {
+        return this.storage.set(KEYS.products, products);
     }
 
-    private generateRandomName(): string {
-        const words = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa'];
-        const randomWord1 = words[Math.floor(Math.random() * words.length)];
-        const randomWord2 = words[Math.floor(Math.random() * words.length)];
-        return `${randomWord1} ${randomWord2}`;
+    saveReceipts(receipts: ReceiptDocument[]): Promise<void> {
+        return this.storage.set(KEYS.receipts, receipts);
     }
 }

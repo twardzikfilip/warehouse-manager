@@ -1,17 +1,115 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+    <ion-title>{{ 'dashboard.title' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="chooseLanguage()" [attr.aria-label]="'dashboard.language' | translate">
+        <ion-icon slot="start" name="language-outline"></ion-icon>
+        {{ language.current().toUpperCase() }}
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">
+        <ion-card class="stat">
+          <ion-card-header>
+            <ion-card-title>{{ productsStore.products().length | number: '1.0-0' : language.current() }}</ion-card-title>
+            <ion-card-subtitle>{{ 'dashboard.products' | translate }}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="4">
+        <ion-card class="stat">
+          <ion-card-header>
+            <ion-card-title>{{ productsStore.totalQuantity() | number: '1.0-0' : language.current() }}</ion-card-title>
+            <ion-card-subtitle>{{ 'dashboard.units' | translate }}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="4">
+        <ion-card class="stat">
+          <ion-card-header>
+            <ion-card-title>{{ productsStore.receiptsThisMonth() }}</ion-card-title>
+            <ion-card-subtitle>{{ 'dashboard.receiptsThisMonth' | translate }}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <app-explore-container name="Stan magazynu"></app-explore-container>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ 'dashboard.lowStock' | translate }}</ion-card-title>
+      <ion-card-subtitle>{{ 'dashboard.lowStockHint' | translate: { threshold: lowStockThreshold } }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      @if (productsStore.lowStock().length === 0) {
+        <p>{{ 'dashboard.lowStockEmpty' | translate }}</p>
+      } @else {
+        <ion-list lines="none">
+          @for (product of productsStore.lowStock(); track product.id) {
+            <ion-item>
+              <ion-label>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.code }}</p>
+              </ion-label>
+              <ion-badge slot="end" [color]="product.quantity === 0 ? 'danger' : 'warning'">
+                {{ product.quantity }} {{ product.unit }}
+              </ion-badge>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ 'dashboard.recentReceipts' | translate }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if (productsStore.recentReceipts().length === 0) {
+        <p>{{ 'dashboard.recentReceiptsEmpty' | translate }}</p>
+      } @else {
+        <ion-list lines="none">
+          @for (receipt of productsStore.recentReceipts(); track receipt.id) {
+            <ion-item>
+              <ion-label>
+                <h3>{{ receipt.number }}</h3>
+                <p>{{ receipt.supplier }}</p>
+                <p>{{ 'dashboard.receiptLines' | translate: { count: receipt.lines.length } }}</p>
+              </ion-label>
+              <ion-note slot="end">{{ (receipt.date || receipt.importedAt) | date: 'mediumDate' : undefined : language.current() }}</ion-note>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ 'dashboard.recentlyUpdated' | translate }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if (productsStore.recentlyUpdated().length === 0) {
+        <p>{{ 'dashboard.recentlyUpdatedEmpty' | translate }}</p>
+      } @else {
+        <ion-list lines="none">
+          @for (product of productsStore.recentlyUpdated(); track product.id) {
+            <ion-item>
+              <ion-label>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.code }} · {{ product.updatedAt | date: 'short' : undefined : language.current() }}</p>
+              </ion-label>
+              <ion-note slot="end">{{ product.quantity }} {{ product.unit }}</ion-note>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </ion-card-content>
+  </ion-card>
 </ion-content>

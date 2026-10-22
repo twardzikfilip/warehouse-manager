@@ -1,0 +1,110 @@
+{
+  "tabs": {
+    "scan": "Skanuj",
+    "products": "Produkty",
+    "dashboard": "Podsumowanie"
+  },
+  "common": {
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "close": "Zamknij"
+  },
+  "scan": {
+    "title": "Zeskanuj dokument",
+    "intro": "Zrób zdjęcie dokumentu przyjęcia (PZ). Połóż kartkę płasko, wypełnij nią kadr i unikaj cieni.",
+    "takePhoto": "Zrób lub wybierz zdjęcie",
+    "useSample": "Użyj przykładowego dokumentu",
+    "photoPrompt": {
+      "header": "Zdjęcie dokumentu",
+      "photo": "Wybierz z galerii",
+      "picture": "Zrób zdjęcie"
+    },
+    "step": {
+      "preparing": "Przygotowywanie obrazu…",
+      "recognizing": "Rozpoznawanie tekstu… {{percent}}%",
+      "firstRunHint": "Przy pierwszym skanowaniu pobierane są dane językowe OCR – może to chwilę potrwać."
+    },
+    "review": {
+      "title": "Sprawdź dokument",
+      "document": "Dokument",
+      "number": "Numer dokumentu",
+      "date": "Data",
+      "supplier": "Dostawca",
+      "invoice": "Numer faktury",
+      "lines": "Pozycje ({{count}})",
+      "code": "Kod",
+      "name": "Nazwa",
+      "quantity": "Ilość",
+      "addLine": "Dodaj pozycję",
+      "removeLine": "Usuń pozycję",
+      "rawText": "Rozpoznany tekst",
+      "accept": "Przyjmij na stan",
+      "discard": "Odrzuć",
+      "existing": "na stanie: {{quantity}}",
+      "new": "nowy produkt"
+    },
+    "warning": {
+      "duplicate": "Dokument {{number}} został już przyjęty.",
+      "checksum": "Suma ilości pozycji wynosi {{lines}}, a suma na dokumencie {{footer}}.",
+      "linesToCheck": "Pozycje do sprawdzenia: {{count}} – są wyróżnione.",
+      "noLines": "Nie rozpoznano żadnych pozycji. Spróbuj wyraźniejszego zdjęcia lub dodaj pozycje ręcznie.",
+      "invalid": "Każda pozycja musi mieć kod, nazwę i ilość co najmniej 1."
+    },
+    "imported": "Przyjęto na stan pozycji: {{count}}.",
+    "ocrError": "Rozpoznawanie tekstu nie powiodło się. Sprawdź połączenie z internetem i spróbuj ponownie."
+  },
+  "list": {
+    "title": "Produkty",
+    "search": "Szukaj po kodzie lub nazwie",
+    "sortBy": "Sortuj według",
+    "sort": {
+      "name": "Nazwa",
+      "code": "Kod",
+      "quantity": "Ilość",
+      "updatedAt": "Ostatnia zmiana"
+    },
+    "toggleOrder": "Zmień kolejność sortowania",
+    "empty": "Brak produktów",
+    "emptyHint": "Zeskanuj dokument przyjęcia lub dodaj produkt ręcznie.",
+    "noResults": "Brak produktów pasujących do wyszukiwania.",
+    "add": "Dodaj produkt",
+    "increase": "Zwiększ ilość",
+    "decrease": "Zmniejsz ilość",
+    "deleteConfirm": {
+      "header": "Usunąć produkt?",
+      "message": "{{name}} zostanie usunięty ze stanu."
+    },
+    "deleted": "Produkt usunięty."
+  },
+  "productForm": {
+    "titleAdd": "Nowy produkt",
+    "titleEdit": "Edytuj produkt",
+    "code": "Nr katalogowy",
+    "name": "Nazwa",
+    "unit": "Jednostka",
+    "quantity": "Ilość",
+    "required": "Kod, nazwa i jednostka są wymagane; ilość nie może być ujemna.",
+    "duplicateCode": "Produkt o tym kodzie już istnieje."
+  },
+  "dashboard": {
+    "title": "Podsumowanie",
+    "products": "Produkty",
+    "units": "Sztuk na stanie",
+    "receiptsThisMonth": "Przyjęcia w tym miesiącu",
+    "lowStock": "Niski stan",
+    "lowStockHint": "Produkty z ilością {{threshold}} lub mniejszą",
+    "lowStockEmpty": "Wszystkie produkty mają wystarczający stan.",
+    "recentReceipts": "Ostatnie przyjęcia",
+    "recentReceiptsEmpty": "Nie przyjęto jeszcze żadnych dokumentów.",
+    "receiptLines": "Pozycje: {{count}}",
+    "recentlyUpdated": "Ostatnio zmienione",
+    "recentlyUpdatedEmpty": "Brak produktów.",
+    "language": "Język"
+  },
+  "language": {
+    "pl": "Polski",
+    "en": "English"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "tabs": {
+    "scan": "Scan",
+    "products": "Products",
+    "dashboard": "Dashboard"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  },
+  "scan": {
+    "title": "Scan document",
+    "intro": "Take a photo of a goods receipt document (PZ). Lay the page flat, fill the frame and avoid shadows.",
+    "takePhoto": "Take or choose photo",
+    "useSample": "Use sample document",
+    "photoPrompt": {
+      "header": "Document photo",
+      "photo": "Choose from gallery",
+      "picture": "Take photo"
+    },
+    "step": {
+      "preparing": "Preparing image…",
+      "recognizing": "Recognizing text… {{percent}}%",
+      "firstRunHint": "The first scan downloads OCR language data and may take a while."
+    },
+    "review": {
+      "title": "Check document",
+      "document": "Document",
+      "number": "Document number",
+      "date": "Date",
+      "supplier": "Supplier",
+      "invoice": "Invoice number",
+      "lines": "Items ({{count}})",
+      "code": "Code",
+      "name": "Name",
+      "quantity": "Qty",
+      "addLine": "Add item",
+      "removeLine": "Remove item",
+      "rawText": "Recognized text",
+      "accept": "Add to stock",
+      "discard": "Discard",
+      "existing": "in stock: {{quantity}}",
+      "new": "new product"
+    },
+    "warning": {
+      "duplicate": "Document {{number}} has already been imported.",
+      "checksum": "Item quantities add up to {{lines}}, but the document total is {{footer}}.",
+      "linesToCheck": "{{count}} item(s) need checking – they are highlighted.",
+      "noLines": "No items were recognized. Try a sharper photo or add items manually.",
+      "invalid": "Every item needs a code, a name and a quantity of at least 1."
+    },
+    "imported": "Added {{count}} item(s) to stock.",
+    "ocrError": "Text recognition failed. Check your internet connection and try again."
+  },
+  "list": {
+    "title": "Products",
+    "search": "Search by code or name",
+    "sortBy": "Sort by",
+    "sort": {
+      "name": "Name",
+      "code": "Code",
+      "quantity": "Quantity",
+      "updatedAt": "Last change"
+    },
+    "toggleOrder": "Change sort order",
+    "empty": "No products yet",
+    "emptyHint": "Scan a goods receipt or add a product manually.",
+    "noResults": "No products match your search.",
+    "add": "Add product",
+    "increase": "Increase quantity",
+    "decrease": "Decrease quantity",
+    "deleteConfirm": {
+      "header": "Delete product?",
+      "message": "{{name}} will be removed from stock."
+    },
+    "deleted": "Product deleted."
+  },
+  "productForm": {
+    "titleAdd": "New product",
+    "titleEdit": "Edit product",
+    "code": "Catalog number",
+    "name": "Name",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "required": "Code, name and unit are required; quantity cannot be negative.",
+    "duplicateCode": "A product with this code already exists."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "products": "Products",
+    "units": "Units in stock",
+    "receiptsThisMonth": "Receipts this month",
+    "lowStock": "Low stock",
+    "lowStockHint": "Products with {{threshold}} or fewer units",
+    "lowStockEmpty": "All products are sufficiently stocked.",
+    "recentReceipts": "Recent receipts",
+    "recentReceiptsEmpty": "No documents imported yet.",
+    "receiptLines": "{{count}} item(s)",
+    "recentlyUpdated": "Recently changed",
+    "recentlyUpdatedEmpty": "No products yet.",
+    "language": "Language"
+  },
+  "language": {
+    "pl": "Polski",
+    "en": "English"
+  }
+}

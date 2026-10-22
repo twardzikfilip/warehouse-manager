@@ -5,20 +5,22 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
     providedIn: 'root',
 })
 export class CameraService {
-    constructor() {}
-
-    async takePhoto(): Promise<string | null> {
+    /** Lets the user take a photo or pick one from the gallery; null when cancelled. */
+    async getPhoto(labels: { header: string; photo: string; picture: string; cancel: string }): Promise<string | null> {
         try {
             const photo = await Camera.getPhoto({
                 quality: 90,
                 allowEditing: false,
-                resultType: CameraResultType.Base64, // opotional: CameraResultType.DataUrl
-                source: CameraSource.Camera,
+                resultType: CameraResultType.DataUrl,
+                source: CameraSource.Prompt,
+                promptLabelHeader: labels.header,
+                promptLabelPhoto: labels.photo,
+                promptLabelPicture: labels.picture,
+                promptLabelCancel: labels.cancel,
             });
-            console.log('Photo taken:', photo);
-            return `data:image/jpeg;base64,${photo.base64String}` // || null;
-        } catch (error) {
-            console.error('Error taking photo:', error);
+            return photo.dataUrl ?? null;
+        } catch {
+            // Thrown when the user cancels.
             return null;
         }
     }

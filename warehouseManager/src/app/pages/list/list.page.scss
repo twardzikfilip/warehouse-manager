@@ -1,0 +1,24 @@
+.sort-select {
+  padding-inline: 16px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  ion-badge {
+    min-width: 4.5em;
+    text-align: center;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--ion-color-medium);
+  margin-top: 25%;
+}
+
+ion-list {
+  padding-bottom: 80px;
+}
