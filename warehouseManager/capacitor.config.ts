@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'warehouseManager',
+  appId: 'com.warehousemanager.app',
+  appName: 'Warehouse Manager',
   webDir: 'www'
 };
 
